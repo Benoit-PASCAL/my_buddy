@@ -1,0 +1,27 @@
+:root {
+    --logo-font-family: 'Caveat', serif;
+    --title-font-family: 'Quicksand', sans-serif;
+    --text-font-family: 'Nunito', sans-serif;
+}
+
+body {
+    font-family: var(--text-font-family);
+    font-size: 18px;
+    box-sizing: border-box;
+
+    width: 100vw;
+}
+
+main {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Brand */
+.brand-title {
+    font-family: var(--logo-font-family);
+    font-size: 5em;
+}

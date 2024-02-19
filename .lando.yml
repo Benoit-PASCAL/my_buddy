@@ -1,0 +1,14 @@
+name: my-local-buddy
+recipe: symfony
+config:
+  php: '8.1'
+  via: nginx
+  webroot: public
+services:
+  database:
+    type: mysql
+    portforward: 3307
+    creds:
+      user: admin
+      password: admin
+      database: master
