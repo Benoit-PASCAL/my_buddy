@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="bg" style="height: 100vh; position: absolute; overflow: hidden; width: 100vw; z-index: -1">
+        {% for i in 0..4 %}
+            <div class="bubble color-{{ i%5 }}" style="left: {{ random(0,1800) }}px; top: {{ random(0,800) }}px; width: {{ random(150,350) }}px; "></div>
+        {% endfor %}
+    </div>
+<div class="text-center">
+    <h1 class="brand-title">{{ title }}</h1>
+
+    <p> {{ message }} </p>
+</div>
+{% endblock %}
