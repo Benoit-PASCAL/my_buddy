@@ -8,7 +8,6 @@ body {
     font-family: var(--text-font-family);
     font-size: 18px;
     box-sizing: border-box;
-
     width: 100vw;
 }
 

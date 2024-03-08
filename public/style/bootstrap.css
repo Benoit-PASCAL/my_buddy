@@ -1,0 +1,45 @@
+/* Layout */
+
+.container {
+    min-height: 100vh;
+    max-width: 100vw;
+    padding-top: 10vh;
+    width: 90%
+}
+
+/* Card */
+.card-footer {
+    text-align: right;
+}
+
+/* Table */
+
+thead {
+    display: none;
+}
+
+.cell-title {
+    display: inline-block;
+    font-weight: bold;
+    min-width: 25%;
+}
+
+tr {
+    display: flex;
+    flex-flow: column;
+    margin-bottom: 1em;
+}
+
+@media (min-width: 1024px) {
+    thead {
+        display: table-header-group;
+    }
+
+    .cell-title {
+        display: none;
+    }
+
+    tr {
+        display: table-row;
+    }
+}
