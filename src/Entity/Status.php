@@ -33,6 +33,9 @@ class Status
     #[ORM\OneToMany(targetEntity: Assignment::class, mappedBy: 'role')]
     private Collection $parent;
 
+    #[ORM\Column]
+    private ?bool $active = null;
+
     public function __construct()
     {
         $this->parent = new ArrayCollection();
@@ -113,5 +116,22 @@ class Status
     public function getParents(): Collection
     {
         return $this->parent;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): static
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->label;
     }
 }

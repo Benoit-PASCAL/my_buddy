@@ -1,4 +1,52 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <div class="card-body">
+        <div class="user_assignments"
+             data-index="{{ form.assignments|length > 0 ? form.assignments|last.vars.name + 1 : 0 }}"
+             data-prototype="{{ form_widget(form.assignments.vars.prototype)|e('html_attr') }}"
+        ></div>
+        {{ form_widget(form) }}
+    </div>
+    <div class="card-footer">
+        <a class="btn btn-outline-secondary" href="{{ path('app_user_index') }}">Back to list</a>
+        <button class="btn btn-outline-success">{{ button_label|default('Save') }}</button>
+    </div>
 {{ form_end(form) }}
+
+<script>
+    const elAssignmentGroup = document.getElementById('user_assignments').parentElement;
+    const elAddAssignmentBtn = document.createElement('div')
+    elAddAssignmentBtn.innerHTML = '<button type="button" class="btn btn-outline-primary add_item_link" data-collection-holder-class="user_assignments">Add an assignment</button>';
+    elAssignmentGroup.append(elAddAssignmentBtn);
+
+    const addFormToCollection = (e) => {
+        const collectionPrototype = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+        const collectionHolder = document.getElementById(e.currentTarget.dataset.collectionHolderClass);
+
+        const item = document.createElement('div');
+
+        item.innerHTML = collectionPrototype
+            .dataset
+            .prototype
+            .replace(
+                /__name__/g,
+                collectionPrototype.dataset.index
+            );
+
+        const removeBtn = document.createElement('div');
+        removeBtn.innerHTML = '<button type="button" class="btn btn-outline-danger">Remove</button>';
+        removeBtn.addEventListener('click', () => {
+            item.remove();
+            removeBtn.remove();
+        });
+
+        collectionHolder.append(item, removeBtn);
+
+        collectionPrototype.dataset.index++;
+    };
+
+    document
+        .querySelectorAll('.add_item_link')
+        .forEach(btn => {
+            btn.addEventListener("click", addFormToCollection)
+        });
+</script>

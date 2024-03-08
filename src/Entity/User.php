@@ -44,7 +44,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $profilePicture = null;
 
-    #[ORM\OneToMany(targetEntity: Assignment::class, mappedBy: 'appUser')]
+    #[ORM\OneToMany(targetEntity: Assignment::class, mappedBy: 'appUser', cascade: ['persist'])]
     private Collection $assignments;
 
     public function __construct()
@@ -59,7 +59,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getEmail(): ?string
     {
-        return $this->email;
+        return str_replace('&#64;', '@', $this->email);
     }
 
     public function setEmail(string $email): static
@@ -181,7 +181,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->assignments;
     }
 
-    public function addAssignments(Assignment $assignments): static
+    public function getCurrentAssignments(): Collection
+    {
+        $roles = new ArrayCollection();
+        $roles_label = [];
+
+        foreach ($this->assignments as $assignment) {
+            /** @var Assignment $assignment */
+            if(
+                $assignment->getRole()->isActive() &&
+                $assignment->hasStarted() &&
+                !$assignment->hasEnded() &&
+                !in_array($assignment->getRole()->getLabel(), $roles_label)
+            ) {
+                $roles[] = $assignment;
+                $roles_label[] = $assignment->getRole()->getLabel();
+            }
+        }
+
+        return $roles;
+    }
+
+    public function addAssignment(Assignment $assignments): static
     {
         if (!$this->assignments->contains($assignments)) {
             $this->assignments->add($assignments);
@@ -191,7 +212,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeAssignments(Assignment $assignments): static
+    public function removeAssignment(Assignment $assignments): static
     {
         if ($this->assignments->removeElement($assignments)) {
             // set the owning side to null (unless already changed)

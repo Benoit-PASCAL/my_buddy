@@ -14,7 +14,7 @@ class Assignment
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'roless')]
+    #[ORM\ManyToOne(inversedBy: 'assignments')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $appUser = null;
 

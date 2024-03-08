@@ -3,46 +3,66 @@
 {% block title %}User index{% endblock %}
 
 {% block body %}
-    <h1>User index</h1>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1>User index</h1>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Roles</th>
+                        <th>LastName</th>
+                        <th>FirstName</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>
+                                <span class="cell-title">Roles</span>
+                                {% for assignment in user.currentAssignments %}
+                                    <span style="color:{{ assignment.role.fullColor|raw }}">{{ assignment.role.fullIcon|raw }}</span>
+                                    {{ assignment.role.label }}
+                                {% endfor %}
+                            </td>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Roles</th>
-                <th>LastName</th>
-                <th>FirstName</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>ProfilePicture</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for user in users %}
-            <tr>
-                <td>
-                    {% for assignment in user.assignments %}
-                        <span style="color:{{ assignment.role.fullColor|raw }}">{{ assignment.role.fullIcon|raw }}</span>
-                        {{ assignment.role.label }}
+                            <td>
+                                <span class="cell-title">LastName</span>
+                                {{ user.lastName }}</td>
+                            <td>
+                                <span class="cell-title">FirstName</span>
+                                {{ user.firstName }}
+                            </td>
+                            <td>
+                                <span class="cell-title">Email</span>
+                                {{ user.email }}
+                            </td>
+                            <td>
+                                <span class="cell-title">Phone</span>
+                                {{ user.phone }}
+                            </td>
+                            <td>
+                                <span class="cell-title">actions</span>
+                                <a class="btn btn-outline-primary" href="{{ path('app_user_show', {'id': user.id}) }}">See</a>
+                                <a class="btn btn-outline-primary" href="{{ path('app_user_edit', {'id': user.id}) }}">Edit</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="9">no records found</td>
+                        </tr>
                     {% endfor %}
-                </td>
-                <td>{{ user.lastName }}</td>
-                <td>{{ user.firstName }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.phone }}</td>
-                <td>{{ user.profilePicture }}</td>
-                <td>
-                    <a href="{{ path('app_user_show', {'id': user.id}) }}">show</a>
-                    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="9">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_user_new') }}">Create new</a>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-outline-success" href="{{ path('app_user_new') }}">Create new</a>
+            </div>
+        </div>
+    </div>
 {% endblock %}

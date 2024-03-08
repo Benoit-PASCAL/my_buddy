@@ -28,7 +28,7 @@ class StatusRepository extends ServiceEntityRepository
 
     public function findAllRoles()
     {
-        $this->findBy(['type' => Status::ROLE_TYPE]);
+        return $this->findBy(['type' => Status::ROLE_TYPE]);
     }
 
     public function findRolesBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)

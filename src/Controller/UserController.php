@@ -6,13 +6,22 @@ use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/dashboard/user')]
 class UserController extends RightsController
 {
+    private SluggerInterface $slugger;
+
+    public function __construct(SluggerInterface $slugger)
+    {
+        $this->slugger = $slugger;
+    }
 
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
@@ -31,6 +40,8 @@ class UserController extends RightsController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword('')
+                ->setProfilePicture('');
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -58,8 +69,13 @@ class UserController extends RightsController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $picture */
+            $picture = $form->get('profilePicture')->getData();
+            if ($picture) {
+                $newPathName = $this->setUniquePath($picture);
+                $user->setProfilePicture($newPathName);
+            }
             $entityManager->flush();
-
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -78,5 +94,22 @@ class UserController extends RightsController
         }
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    public function setUniquePath(UploadedFile $picture): string
+    {
+        $originalName = pathinfo($picture->getClientOriginalName(), PATHINFO_FILENAME);
+        $newName = $this->slugger->slug($originalName).'-'.uniqid().'.'.$picture->guessExtension();
+
+        try {
+            $picture->move(
+                'uploads/profile_pictures',
+                $newName
+            );
+        } catch (FileException $e) {
+
+        }
+
+        return $newName;
     }
 }

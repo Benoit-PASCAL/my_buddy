@@ -3,64 +3,83 @@
 {% block title %}User{% endblock %}
 
 {% block body %}
-    <h1>User</h1>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1>User</h1>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <th>LastName</th>
+                        <td>{{ user.lastName }}</td>
+                    </tr>
+                    <tr>
+                        <th>FirstName</th>
+                        <td>{{ user.firstName }}</td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td>{{ user.email }}</td>
+                    </tr>
+                    <tr>
+                        <th>Phone</th>
+                        <td>{{ user.phone }}</td>
+                    </tr>
+                    <tr>
+                        <th>ProfilePicture</th>
+                        <td>
+                            {% if user.profilePicture %}
+                                <img src="{{ app.request.schemeandhttphost }}/uploads/profile_pictures/{{ user.profilePicture }}" style="width: 150px" />
+                            {% else %}
+                                No picture
+                            {% endif %}
+                        </td>
+                    </tr>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>LastName</th>
-                <td>{{ user.lastName }}</td>
-            </tr>
-            <tr>
-                <th>FirstName</th>
-                <td>{{ user.firstName }}</td>
-            </tr>
-            <tr>
-                <th>Roles</th>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ user.email }}</td>
-            </tr>
-            <tr>
-                <th>Phone</th>
-                <td>{{ user.phone }}</td>
-            </tr>
-            <tr>
-                <th>ProfilePicture</th>
-                <td>{{ user.profilePicture }}</td>
-            </tr>
+                    </tbody>
+                </table>
+                <h2>Assignments</h2>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Role</th>
+                        <th>StartDate</th>
+                        <th>EndDate</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for assignment in user.assignments %}
+                        <tr>
+                            <td>
+                                <span class="cell-title">Role</span>
+                                <span style="color:{{ assignment.role.fullColor }}">{{ assignment.role.fullIcon|raw }}{{ assignment.role.label }}</span>
 
-        </tbody>
-    </table>
+                            </td>
+                            <td>
+                                <span class="cell-title">StartDate</span>
+                                {{ assignment.startDate ? assignment.startDate|date('Y-m-d') : '' }}
+                            </td>
+                            <td>
+                                <span class="cell-title">EndDate</span>
+                                {{ assignment.endDate ? assignment.endDate|date('Y-m-d') : '' }}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="3">No assignments found</td>
+                        </tr>
+                    {% endfor %}
 
-    <h2>Assignments</h2>
-
-    <table class="table">
-        <tbody>
-        {% for assignment in user.assignments %}
-            <tr>
-                <th>Role</th>
-                <td style="color:{{ assignment.role.fullColor }}">{{ assignment.role.fullIcon|raw }}{{ assignment.role.label }}</td>
-            </tr>
-            <tr>
-                <th>StartDate</th>
-                <td>{{ assignment.startDate ? assignment.startDate|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>EndDate</th>
-                <td>{{ assignment.endDate ? assignment.endDate|date('Y-m-d') : '' }}</td>
-            </tr>
-
-        {% endfor %}
-
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_user_index') }}">back to list</a>
-
-    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
-
-    {{ include('user/_delete_form.html.twig') }}
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-outline-secondary" href="{{ path('app_user_index') }}">Back to list</a>
+                <a class="btn btn-outline-primary" href="{{ path('app_user_edit', {'id': user.id}) }}">Edit</a>
+                {{ include('user/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
 {% endblock %}
