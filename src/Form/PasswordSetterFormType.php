@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class RegistrationFormType extends AbstractType
+class PasswordSetterFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -79,6 +79,32 @@ class RegistrationFormType extends AbstractType
                 'label_attr' => [
                     'class' => 'form-label'
                 ],
+                'row_attr' => [
+                    'class' => 'form-group'
+                ],
+            ])
+            ->add('secretToken', PasswordType::class, [
+                'attr' => [
+                    'class' => 'form-control'
+                ],
+                'constraints' => [
+                    new NotBlank(),
+                    new Length([
+                        'min' => 8,
+                        'minMessage' => 'Your secret key should be at least {{ limit }} characters',
+                        'max' => 4096,
+                    ]),
+                ],
+                'empty_data' => '',
+                'help' => 'Ask your administrator for the secret key to set up your account.',
+                'help_attr' => [
+                    'class' => 'form-text'
+                ],
+                'label' => 'Secret Key',
+                'label_attr' => [
+                    'class' => 'form-label'
+                ],
+                'mapped' => false,
                 'row_attr' => [
                     'class' => 'form-group'
                 ],

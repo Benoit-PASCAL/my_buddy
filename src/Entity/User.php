@@ -47,6 +47,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Assignment::class, mappedBy: 'appUser', cascade: ['persist'])]
     private Collection $assignments;
 
+    #[ORM\Column(length: 70)]
+    private ?string $secretKey = null;
+
     public function __construct()
     {
         $this->assignments = new ArrayCollection();
@@ -220,6 +223,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $assignments->setAppUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSecretKey(): ?string
+    {
+        return $this->secretKey;
+    }
+
+    public function setSecretKey(string $secretKey): static
+    {
+        $this->secretKey = $secretKey;
 
         return $this;
     }

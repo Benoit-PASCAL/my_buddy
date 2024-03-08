@@ -37,6 +37,15 @@
                             {% endif %}
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            Secret Key
+                            <i class="bi bi-question-circle" title="This is the secret key that the user will need to set up his password."></i>
+                        </th>
+                        <td>
+                            {{ user.secretKey }}
+                        </td>
+                    </tr>
 
                     </tbody>
                 </table>
