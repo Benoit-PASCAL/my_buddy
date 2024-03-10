@@ -1,0 +1,76 @@
+<table class="table">
+    <tbody>
+    <tr>
+        <th>LastName</th>
+        <td>{{ user.lastName }}</td>
+    </tr>
+    <tr>
+        <th>FirstName</th>
+        <td>{{ user.firstName }}</td>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td>{{ user.email }}</td>
+    </tr>
+    <tr>
+        <th>Phone</th>
+        <td>{{ user.phone }}</td>
+    </tr>
+    <tr>
+        <th>ProfilePicture</th>
+        <td>
+            {% if user.profilePicture %}
+                <img src="{{ app.request.schemeandhttphost }}/uploads/profile_pictures/{{ user.profilePicture }}" style="width: 150px" />
+            {% else %}
+                No picture
+            {% endif %}
+        </td>
+    </tr>
+    {% if is_granted('ROLE_ADMIN') %}
+    <tr>
+        <th>
+            Secret Key
+            <i class="bi bi-question-circle" title="This is the secret key that the user will need to set up his password."></i>
+        </th>
+        <td>
+            {{ user.secretKey }}
+        </td>
+    </tr>
+    {% endif %}
+
+    </tbody>
+</table>
+<h2>Assignments</h2>
+<table class="table">
+                    <thead>
+                    <tr>
+                        <th>Role</th>
+                        <th>StartDate</th>
+                        <th>EndDate</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for assignment in user.assignments %}
+                        <tr>
+                            <td>
+                                <span class="cell-title">Role</span>
+                                <span style="color:{{ assignment.role.fullColor }}">{{ assignment.role.fullIcon|raw }}{{ assignment.role.label }}</span>
+
+                            </td>
+                            <td>
+                                <span class="cell-title">StartDate</span>
+                                {{ assignment.startDate ? assignment.startDate|date('Y-m-d') : '' }}
+                            </td>
+                            <td>
+                                <span class="cell-title">EndDate</span>
+                                {{ assignment.endDate ? assignment.endDate|date('Y-m-d') : '' }}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="3">No assignments found</td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
