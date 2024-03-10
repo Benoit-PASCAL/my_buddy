@@ -1,0 +1,16 @@
+{% extends 'chore/base.html.twig' %}
+
+{% block title %}Edit User{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1>User</h1>
+            </div>
+            {{ include('chore/user/_form.html.twig', {'button_label': 'Update'}) }}
+        </div>
+
+
+    </div>
+{% endblock %}
