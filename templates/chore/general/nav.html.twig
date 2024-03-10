@@ -1,0 +1,25 @@
+<div class="navbar-btn">
+    <a class="btn btn-open" data-bs-toggle="offcanvas" href="#offcanvasScrolling" role="button" aria-controls="offcanvasExample">
+        <i class="bi bi-chevron-right"></i>
+    </a>
+</div>
+
+{# Navbar #}
+<div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+    <div class="offcanvas-header navbar-header">
+        <a class="btn btn-hide" data-bs-toggle="offcanvas" href="#offcanvasScrolling" role="button" aria-controls="offcanvasExample">
+            <i class="bi bi-chevron-left"></i>
+        </a>
+    </div>
+    <div class="offcanvas-body">
+        <div class="group d-flex flex-column">
+            <div class="text-uppercase">Me</div>
+            <a type="button" class="btn btn-outline-secondary" href="{{ path('app_profile_show') }}">My profile</a>
+        </div>
+        <div class="group d-flex flex-column">
+            <div class="text-uppercase">Users</div>
+            <a type="button" class="btn btn-outline-secondary" href="{{ path('app_user_index') }}">See all</a>
+            <a type="button" class="btn btn-outline-secondary" href="{{ path('app_user_new') }}">Add new</a>
+        </div>
+    </div>
+</div>
