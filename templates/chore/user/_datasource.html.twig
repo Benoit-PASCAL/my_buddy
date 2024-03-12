@@ -42,35 +42,35 @@
 </table>
 <h2>Assignments</h2>
 <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Role</th>
-                        <th>StartDate</th>
-                        <th>EndDate</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for assignment in user.assignments %}
-                        <tr>
-                            <td>
-                                <span class="cell-title">Role</span>
-                                <span style="color:{{ assignment.role.fullColor }}">{{ assignment.role.fullIcon|raw }}{{ assignment.role.label }}</span>
+    <thead>
+    <tr>
+        <th>Role</th>
+        <th>StartDate</th>
+        <th>EndDate</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for assignment in user.assignments %}
+        <tr>
+            <td>
+                <span class="cell-title">Role</span>
+                <span style="color:{{ assignment.role.color }}">{{ assignment.role.fullIcon|raw }}{{ assignment.role.label }}</span>
 
-                            </td>
-                            <td>
-                                <span class="cell-title">StartDate</span>
-                                {{ assignment.startDate ? assignment.startDate|date('Y-m-d') : '' }}
-                            </td>
-                            <td>
-                                <span class="cell-title">EndDate</span>
-                                {{ assignment.endDate ? assignment.endDate|date('Y-m-d') : '' }}
-                            </td>
-                        </tr>
-                    {% else %}
-                        <tr>
-                            <td colspan="3">No assignments found</td>
-                        </tr>
-                    {% endfor %}
+            </td>
+            <td>
+                <span class="cell-title">StartDate</span>
+                {{ assignment.startDate ? assignment.startDate|date('Y-m-d') : '' }}
+            </td>
+            <td>
+                <span class="cell-title">EndDate</span>
+                {{ assignment.endDate ? assignment.endDate|date('Y-m-d') : '' }}
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="3">No assignments found</td>
+        </tr>
+    {% endfor %}
 
-                    </tbody>
-                </table>
+    </tbody>
+</table>

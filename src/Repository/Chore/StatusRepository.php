@@ -26,14 +26,19 @@ class StatusRepository extends ServiceEntityRepository
         return $this->findOneBy(['type' => Status::ROLE_TYPE ,'label' => 'ROLE_USER']);
     }
 
-    public function findAllRoles()
+    public function findAllControllers(): array
+    {
+        return $this->findBy(['type' => Status::CONTROLLER_TYPE]);
+    }
+
+    public function findAllRoles(): array
     {
         return $this->findBy(['type' => Status::ROLE_TYPE]);
     }
 
-    public function findRolesBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    public function findRolesBy(array $criteria, array $orderBy = null, $limit = null, $offset = null): array
     {
-        $this->findBy(
+        return $this->findBy(
             array_merge($criteria, ['type' => Status::ROLE_TYPE]),
             $orderBy,
             $limit,

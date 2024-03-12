@@ -1,14 +1,14 @@
 {% extends 'chore/base_dashboard.html.twig' %}
 
-{% block title %}Edit User{% endblock %}
+{% block title %}New Role{% endblock %}
 
 {% block body %}
     <div class="container">
         <div class="card">
             <div class="card-header">
-                <h1>User</h1>
+                <h1>Create new Role</h1>
             </div>
-            {{ include('chore/user/_form.html.twig', {'button_label': 'Update'}) }}
+                {{ include('chore/role/_form.html.twig') }}
         </div>
     </div>
 {% endblock %}

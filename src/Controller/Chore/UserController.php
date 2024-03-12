@@ -2,6 +2,7 @@
 
 namespace App\Controller\Chore;
 
+use App\Entity\Chore\Permission;
 use App\Entity\Chore\User;
 use App\Form\Chore\UserType;
 use App\Repository\Chore\UserRepository;
@@ -27,8 +28,9 @@ class UserController extends RightsController
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
     {
-        //dd('hey');
-        return $this->render('chore/user//index.html.twig', [
+        $this->checkRights(Permission::CAN_VIEW);
+
+        return $this->render('chore/user/index.html.twig', [
             'users' => $userRepository->findAll(),
         ]);
     }
@@ -36,6 +38,8 @@ class UserController extends RightsController
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher): Response
     {
+        $this->checkRights(Permission::CAN_CREATE);
+
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -50,7 +54,7 @@ class UserController extends RightsController
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('chore/user//new.html.twig', [
+        return $this->renderForm('chore/user/new.html.twig', [
             'user' => $user,
             'form' => $form,
         ]);
@@ -59,7 +63,9 @@ class UserController extends RightsController
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user): Response
     {
-        return $this->render('chore/user//show.html.twig', [
+        $this->checkRights(Permission::CAN_VIEW);
+
+        return $this->render('chore/user/show.html.twig', [
             'user' => $user,
         ]);
     }
@@ -67,6 +73,8 @@ class UserController extends RightsController
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
+        $this->checkRights(Permission::CAN_EDIT);
+
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
@@ -81,7 +89,7 @@ class UserController extends RightsController
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('chore/user//edit.html.twig', [
+        return $this->renderForm('chore/user/edit.html.twig', [
             'user' => $user,
             'form' => $form,
         ]);
@@ -90,6 +98,8 @@ class UserController extends RightsController
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
+        $this->checkRights(Permission::CAN_DELETE);
+
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $entityManager->remove($user);
             $entityManager->flush();

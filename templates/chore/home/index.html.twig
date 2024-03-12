@@ -5,7 +5,7 @@
     <h1 class="brand-title">{{ title }}</h1>
     {% if is_granted('ROLE_USER') %}
     <div class="">
-        <a href="{{  path('app_user_index') }}">Dashboard</a>
+        <a href="{{  path('app_profile_show') }}">Dashboard</a>
     </div>
         <div class="">
             <a href="{{  path('app_logout') }}">Logout</a>

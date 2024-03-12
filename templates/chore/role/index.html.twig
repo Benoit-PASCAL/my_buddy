@@ -1,0 +1,66 @@
+{% extends 'chore/base_dashboard.html.twig' %}
+
+{% block title %}Status index{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h1>Roles</h1>
+        </div>
+        <div class="card-body">
+            <table class="table">
+        <thead>
+            <tr>
+                <th>Label</th>
+                {% for permissionName in constant('App\\Entity\\Chore\\Permission::CONTROLLER_LIST') %}
+                    <th>{{ permissionName }}</th>
+                {% endfor %}
+                <th>Active</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for role in statuses %}
+            <tr>
+                <td>
+                    <span class="cell-title">Label</span>
+                    <span style="color:{{ role.color }}">{{ role.fullIcon|raw }}</span>
+                    {{ role.label }}
+                </td>
+                {% for permissionName in constant('App\\Entity\\Chore\\Permission::CONTROLLER_LIST') %}
+                    <td>
+                    <span class="cell-title">
+                                {{ permissionName }}
+                            </span>
+                    {%  for permission in role.permissions %}
+                        {% if permission.controller == permissionName %}
+                            {{ permission }}
+                        {% endif %}
+                    {% endfor %}
+                    </td>
+                {% endfor %}
+                <td>
+                    <span class="cell-title">Active</span>
+                    {{ role.active ? 'Yes' : 'No' }}
+                </td>
+                <td>
+                    <span class="cell-title">Actions</span>
+                    <a class="btn btn-outline-primary" href="{{ path('app_role_show', {'id': role.id}) }}">See</a>
+                    <a class="btn btn-outline-primary" href="{{ path('app_role_edit', {'id': role.id}) }}">Edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+        </div>
+        <div class="card-footer">
+            <a class="btn btn-outline-success" href="{{ path('app_role_new') }}">Create new</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

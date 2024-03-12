@@ -1,0 +1,52 @@
+{% extends 'chore/base_dashboard.html.twig' %}
+
+{% block title %}Role{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1>Role</h1>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>Label</th>
+                            <td>
+                                <span style="color:{{ role.color }}">{{ role.fullIcon|raw }}</span>
+                                {{ role.label }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Active</th>
+                            <td>{{ role.active ? 'Yes' : 'No' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h2>Permissions</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Controller</th>
+                            <th>Permission</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for permission in role.permissions %}
+                            <tr>
+                                <td>{{ permission.controller }}</td>
+                                <td>{{ permission }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-outline-secondary" href="{{ path('app_role_index') }}">Back to list</a>
+                <a class="btn btn-outline-primary" href="{{ path('app_role_edit', {'id': role.id}) }}">Edit</a>
+                {{ include('chore/role/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

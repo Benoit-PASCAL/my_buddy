@@ -12,6 +12,7 @@ use function PHPUnit\Framework\stringStartsWith;
 class Status
 {
     public const ROLE_TYPE = 1;
+    public const CONTROLLER_TYPE = 2;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -36,9 +37,18 @@ class Status
     #[ORM\Column]
     private ?bool $active = null;
 
+    #[ORM\OneToMany(targetEntity: Permission::class, mappedBy: 'role', cascade: ['persist'])]
+    private Collection $permissions;
+
     public function __construct()
     {
         $this->parent = new ArrayCollection();
+        $this->permissions = new ArrayCollection();
+
+        // set default values
+        $this->setActive(true);
+        $this->setColor('000000');
+        $this->setIcon('');
     }
 
     public function getId(): ?int
@@ -133,5 +143,42 @@ class Status
     public function __toString(): string
     {
         return $this->label;
+    }
+
+    /**
+     * @return Collection<int, Permission>
+     */
+    public function getPermissions(): Collection
+    {
+        return $this->permissions;
+    }
+
+    public function addPermission(Permission $permission): static
+    {
+        if (!$this->permissions->contains($permission)) {
+            $this->permissions->add($permission);
+
+            if($this->getType() == self::ROLE_TYPE) {
+                $permission->setRole($this);
+            }
+
+            if($this->getType() == self::CONTROLLER_TYPE) {
+                $permission->setController($this);
+            }
+        }
+
+        return $this;
+    }
+
+    public function removePermission(Permission $permission): static
+    {
+        if ($this->permissions->removeElement($permission)) {
+            // set the owning side to null (unless already changed)
+            if ($permission->getController() === $this) {
+                $permission->setRole(null);
+            }
+        }
+
+        return $this;
     }
 }

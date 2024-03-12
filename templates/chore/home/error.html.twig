@@ -6,7 +6,7 @@
     {{ message }}
     {% if is_granted('ROLE_USER') %}
     <div class="">
-        <a href="{{  path('app_user_index') }}">Return to dashboard</a>
+        <a href="{{  path('app_profile_show') }}">Return to dashboard</a>
     </div>
         <div class="">
             <a href="{{  path('app_logout') }}">Logout</a>

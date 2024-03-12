@@ -6,7 +6,7 @@
     <div class="container">
         <div class="card">
             <div class="card-header">
-                <h1>User index</h1>
+                <h1>Users</h1>
             </div>
             <div class="card-body">
                 <table class="table">
@@ -26,8 +26,8 @@
                             <td>
                                 <span class="cell-title">Roles</span>
                                 {% for assignment in user.currentAssignments %}
-                                    <span style="color:{{ assignment.role.fullColor|raw }}">{{ assignment.role.fullIcon|raw }}</span>
-                                    {{ assignment.role.label }}
+                                    <span style="color:{{ assignment.role.color }}">{{ assignment.role.fullIcon|raw }}</span>
+                                    {{ assignment.role }}
                                 {% endfor %}
                             </td>
 
@@ -47,7 +47,7 @@
                                 {{ user.phone }}
                             </td>
                             <td>
-                                <span class="cell-title">actions</span>
+                                <span class="cell-title">Actions</span>
                                 <a class="btn btn-outline-primary" href="{{ path('app_user_show', {'id': user.id}) }}">See</a>
                                 <a class="btn btn-outline-primary" href="{{ path('app_user_edit', {'id': user.id}) }}">Edit</a>
                             </td>
