@@ -13,9 +13,14 @@ doctrine:
         mappings:
             App:
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/Entity'
+                dir: '%kernel.project_dir%/src/App/Entity'
                 prefix: 'App\Entity'
                 alias: App
+            Chore:
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Chore/Entity'
+                prefix: 'App\Chore\Entity'
+                alias: Chore
 
 when@test:
     doctrine:

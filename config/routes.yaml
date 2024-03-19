@@ -1,6 +1,10 @@
-controllers:
-    resource: ../src/Controller/
+app_controllers:
+    resource: ../src/App/Controller/
     type: attribute
+
+chore_controllers:
+    resource: ../src/Chore/Controller/
+    type: annotation
 
 app_logout:
     path: /logout
