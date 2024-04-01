@@ -49,6 +49,21 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            if(!$this->isCsrfTokenValid('save', $request->request->get('_token'))) {
+                $form->addError(new FormError('Invalid CSRF Token'));
+                return $this->render('chore/registration/register.html.twig', [
+                    'registrationForm' => $form->createView(),
+                ]);
+            }
+
+            if($form->get('plainPassword')->getData() !== $form->get('confirmPassword')->getData()) {
+                $form->addError(new FormError('Password and Confirm Password do not match'));
+                return $this->render('chore/registration/register.html.twig', [
+                    'registrationForm' => $form->createView(),
+                ]);
+            }
+
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,

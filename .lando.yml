@@ -1,4 +1,4 @@
-name: my-local-buddy
+name: my-buddy
 recipe: symfony
 config:
   php: '8.1'
@@ -12,3 +12,10 @@ services:
       user: admin
       password: admin
       database: master
+  test_database:
+    type: mysql
+    portforward: 3308
+    creds:
+      user: admin
+      password: admin
+      database: test

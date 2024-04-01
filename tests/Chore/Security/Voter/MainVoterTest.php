@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Tests\Chore\Security\Voter\Chore;
+namespace App\Tests\Chore\Security\Voter;
 
 use App\Chore\Entity\Assignment;
 use App\Chore\Entity\Permission;

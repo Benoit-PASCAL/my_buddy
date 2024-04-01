@@ -11,21 +11,26 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class UserControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
-    private UserRepository $repository;
-    private string $path = '/user/';
+    private UserRepository $userRepository;
+    private User $adminUser;
+    private User $lambdaUser;
+    private string $path = '/dashboard/user/';
     private EntityManagerInterface $manager;
 
     protected function setUp(): void
     {
         $this->client = static::createClient();
-        $this->repository = static::getContainer()->get('doctrine')->getRepository(User::class);
+        $this->userRepository = static::getContainer()->get('doctrine')->getRepository(User::class);
 
-        foreach ($this->repository->findAll() as $object) {
+        $this->adminUser = $this->userRepository->findOneBy(['email' => 'admin@buddy.com']);
+        $this->lambdaUser = $this->userRepository->findOneBy(['email' => 'lambda@buddy.com']);
+
+        foreach ($this->userRepository->findAll() as $object) {
             $this->manager->remove($object);
         }
     }
 
-    public function testIndex(): void
+    public function testUserIndexRendersCorrectly(): void
     {
         $crawler = $this->client->request('GET', $this->path);
 
@@ -36,9 +41,9 @@ class UserControllerTest extends WebTestCase
         // self::assertSame('Some text on the page', $crawler->filter('.p')->first());
     }
 
-    public function testNew(): void
+    public function testNewUserFormSubmissionCreatesUser(): void
     {
-        $originalNumObjectsInRepository = count($this->repository->findAll());
+        $originalNumObjectsInRepository = count($this->userRepository->findAll());
 
         $this->markTestIncomplete();
         $this->client->request('GET', sprintf('%snew', $this->path));
@@ -57,10 +62,10 @@ class UserControllerTest extends WebTestCase
 
         self::assertResponseRedirects('/user/');
 
-        self::assertSame($originalNumObjectsInRepository + 1, count($this->repository->findAll()));
+        self::assertSame($originalNumObjectsInRepository + 1, count($this->userRepository->findAll()));
     }
 
-    public function testShow(): void
+    public function testUserShowRendersCorrectly(): void
     {
         $this->markTestIncomplete();
         $fixture = new User();
@@ -83,7 +88,7 @@ class UserControllerTest extends WebTestCase
         // Use assertions to check that the properties are properly displayed.
     }
 
-    public function testEdit(): void
+    public function testUserEditFormSubmissionUpdatesUser(): void
     {
         $this->markTestIncomplete();
         $fixture = new User();
@@ -112,7 +117,7 @@ class UserControllerTest extends WebTestCase
 
         self::assertResponseRedirects('/user/');
 
-        $fixture = $this->repository->findAll();
+        $fixture = $this->userRepository->findAll();
 
         self::assertSame('Something New', $fixture[0]->getEmail());
         self::assertSame('Something New', $fixture[0]->getRoles());
@@ -123,11 +128,11 @@ class UserControllerTest extends WebTestCase
         self::assertSame('Something New', $fixture[0]->getProfilePicture());
     }
 
-    public function testRemove(): void
+    public function testUserDeleteRemovesUser(): void
     {
         $this->markTestIncomplete();
 
-        $originalNumObjectsInRepository = count($this->repository->findAll());
+        $originalNumObjectsInRepository = count($this->userRepository->findAll());
 
         $fixture = new User();
         $fixture->setEmail('My Title');
@@ -141,12 +146,12 @@ class UserControllerTest extends WebTestCase
         $this->manager->persist($fixture);
         $this->manager->flush();
 
-        self::assertSame($originalNumObjectsInRepository + 1, count($this->repository->findAll()));
+        self::assertSame($originalNumObjectsInRepository + 1, count($this->userRepository->findAll()));
 
         $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
         $this->client->submitForm('Delete');
 
-        self::assertSame($originalNumObjectsInRepository, count($this->repository->findAll()));
+        self::assertSame($originalNumObjectsInRepository, count($this->userRepository->findAll()));
         self::assertResponseRedirects('/user/');
     }
 }

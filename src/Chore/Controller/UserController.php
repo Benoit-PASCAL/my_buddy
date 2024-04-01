@@ -28,7 +28,7 @@ class UserController extends RightsController
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
     {
-        $this->checkRights(Permission::CAN_VIEW);
+        //$this->checkRights(Permission::CAN_VIEW);
 
         return $this->render('chore/user/index.html.twig', [
             'users' => $userRepository->findAll(),
