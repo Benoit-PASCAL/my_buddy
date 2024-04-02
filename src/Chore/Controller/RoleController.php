@@ -135,6 +135,11 @@ class RoleController extends RightsController
         $this->checkRights(Permission::CAN_DELETE);
 
         if ($this->isCsrfTokenValid('delete'.$role->getId(), $request->request->get('_token'))) {
+
+            foreach ($role->getPermissions() as $permission) {
+                $entityManager->remove($permission);
+            }
+
             $entityManager->remove($role);
             $entityManager->flush();
         }

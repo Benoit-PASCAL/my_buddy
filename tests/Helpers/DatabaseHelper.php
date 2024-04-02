@@ -53,7 +53,19 @@ class DatabaseHelper extends WebTestCase
             ->setLabel('admin')
             ->setIcon('bi-person-fill');
 
+        $roles = [];
         $manager->persist($adminRole);
+
+        foreach (['editable', 'deletable'] as $roleName) {
+            $role = new Status();
+            $role
+                ->setType(Status::ROLE_TYPE)
+                ->setLabel($roleName);
+
+            $roles[] = $role;
+
+            $manager->persist($role);
+        }
 
         foreach (Permission::CONTROLLER_LIST as $controllerName) {
             $controller = new Status();
@@ -71,6 +83,17 @@ class DatabaseHelper extends WebTestCase
                 ->setAccess(Permission::CAN_ALL);
 
             $manager->persist($permission);
+
+            foreach ($roles as $role) {
+                $permission = new Permission();
+                $permission
+                    ->setController($controller)
+                    ->setRole($role)
+                    ->setAccess(Permission::CAN_ALL);
+
+                $manager->persist($permission);
+            }
+
         }
 
         $adminAssignment = new Assignment();
