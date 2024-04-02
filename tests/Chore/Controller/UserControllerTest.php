@@ -4,6 +4,7 @@ namespace App\Tests\Chore\Controller;
 
 use App\Chore\Entity\User;
 use App\Chore\Repository\UserRepository;
+use App\Tests\Helpers\DatabaseHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -16,12 +17,21 @@ class UserControllerTest extends WebTestCase
     private User $lambdaUser;
     private string $path = '/dashboard/user/';
     private EntityManagerInterface $manager;
+    private array $invalidData = [
+        'invalidData', // Invalid data
+        '', // Empty string
+        null, // Empty data
+        '\'OR 1=1; --', // SQL Injection
+        '<script>alert("Hello")</script>', // XSS
+    ];
 
     protected function setUp(): void
     {
         $this->client = static::createClient();
         $this->userRepository = static::getContainer()->get('doctrine')->getRepository(User::class);
+        DatabaseHelper::loadFixtures();
 
+        $this->manager = static::getContainer()->get('doctrine')->getManager();
         $this->adminUser = $this->userRepository->findOneBy(['email' => 'admin@buddy.com']);
         $this->lambdaUser = $this->userRepository->findOneBy(['email' => 'lambda@buddy.com']);
 
@@ -32,126 +42,105 @@ class UserControllerTest extends WebTestCase
 
     public function testUserIndexRendersCorrectly(): void
     {
+        $this->client->loginUser($this->adminUser);
         $crawler = $this->client->request('GET', $this->path);
 
         self::assertResponseStatusCodeSame(200);
         self::assertPageTitleContains('User index');
-
-        // Use the $crawler to perform additional assertions e.g.
-        // self::assertSame('Some text on the page', $crawler->filter('.p')->first());
     }
 
     public function testNewUserFormSubmissionCreatesUser(): void
     {
         $originalNumObjectsInRepository = count($this->userRepository->findAll());
 
-        $this->markTestIncomplete();
+        $this->client->request('GET', '/login');
+        $this->client->submitForm('Login', [
+            '_username' => $this->adminUser->getEmail(),
+            '_password' => 'password',
+        ]);
+
         $this->client->request('GET', sprintf('%snew', $this->path));
 
         self::assertResponseStatusCodeSame(200);
 
         $this->client->submitForm('Save', [
-            'user[email]' => 'Testing',
-            'user[roles]' => 'Testing',
-            'user[password]' => 'Testing',
-            'user[lastName]' => 'Testing',
-            'user[firstName]' => 'Testing',
-            'user[phone]' => 'Testing',
-            'user[profilePicture]' => 'Testing',
+            'user[email]' => 'newuser@buddy.com',
+            'user[lastName]' => '',
+            'user[firstName]' => '',
+            'user[phone]' => '',
+            'user[profilePicture]' => '',
         ]);
 
-        self::assertResponseRedirects('/user/');
+        self::assertResponseRedirects('/dashboard/user/');
 
         self::assertSame($originalNumObjectsInRepository + 1, count($this->userRepository->findAll()));
     }
 
     public function testUserShowRendersCorrectly(): void
     {
-        $this->markTestIncomplete();
-        $fixture = new User();
-        $fixture->setEmail('My Title');
-        $fixture->setRoles('My Title');
-        $fixture->setPassword('My Title');
-        $fixture->setLastName('My Title');
-        $fixture->setFirstName('My Title');
-        $fixture->setPhone('My Title');
-        $fixture->setProfilePicture('My Title');
+        $this->client->request('GET', '/login');
+        $this->client->submitForm('Login', [
+            '_username' => $this->adminUser->getEmail(),
+            '_password' => 'password',
+        ]);
 
-        $this->manager->persist($fixture);
-        $this->manager->flush();
+        $user = $this->userRepository->findOneBy(['email' => 'lambda@buddy.com']);
 
-        $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
+        $this->client->request('GET', sprintf('%s%s', $this->path, $user->getId()));
 
         self::assertResponseStatusCodeSame(200);
         self::assertPageTitleContains('User');
 
-        // Use assertions to check that the properties are properly displayed.
+        // Check if the user's details are displayed
+        self::assertSelectorTextContains('body', 'lambda@buddy.com');
     }
 
     public function testUserEditFormSubmissionUpdatesUser(): void
     {
-        $this->markTestIncomplete();
-        $fixture = new User();
-        $fixture->setEmail('My Title');
-        $fixture->setRoles('My Title');
-        $fixture->setPassword('My Title');
-        $fixture->setLastName('My Title');
-        $fixture->setFirstName('My Title');
-        $fixture->setPhone('My Title');
-        $fixture->setProfilePicture('My Title');
-
-        $this->manager->persist($fixture);
-        $this->manager->flush();
-
-        $this->client->request('GET', sprintf('%s%s/edit', $this->path, $fixture->getId()));
-
-        $this->client->submitForm('Update', [
-            'user[email]' => 'Something New',
-            'user[roles]' => 'Something New',
-            'user[password]' => 'Something New',
-            'user[lastName]' => 'Something New',
-            'user[firstName]' => 'Something New',
-            'user[phone]' => 'Something New',
-            'user[profilePicture]' => 'Something New',
+        $this->client->request('GET', '/login');
+        $this->client->submitForm('Login', [
+            '_username' => $this->adminUser->getEmail(),
+            '_password' => 'password',
         ]);
 
-        self::assertResponseRedirects('/user/');
+        $user = $this->userRepository->findOneBy(['email' => 'editable@buddy.com']);
 
-        $fixture = $this->userRepository->findAll();
+        $this->client->request('GET', sprintf('%s%s/edit', $this->path, $user->getId()));
 
-        self::assertSame('Something New', $fixture[0]->getEmail());
-        self::assertSame('Something New', $fixture[0]->getRoles());
-        self::assertSame('Something New', $fixture[0]->getPassword());
-        self::assertSame('Something New', $fixture[0]->getLastName());
-        self::assertSame('Something New', $fixture[0]->getFirstName());
-        self::assertSame('Something New', $fixture[0]->getPhone());
-        self::assertSame('Something New', $fixture[0]->getProfilePicture());
+        $this->client->submitForm('Update', [
+            'user[email]' => 'editable_2@buddy.com',
+            'user[lastName]' => 'Do',
+            'user[firstName]' => 'Jane',
+            'user[phone]' => '1234567890',
+        ]);
+
+        self::assertResponseRedirects('/dashboard/user/');
+
+        $fixture = $this->userRepository->findOneBy(['id' => $user->getId()]);
+        $this->manager->refresh($fixture);
+
+        self::assertSame('editable_2@buddy.com', $fixture->getEmail());
+        self::assertSame('Do', $fixture->getLastName());
+        self::assertSame('Jane', $fixture->getFirstName());
+        self::assertSame('1234567890', $fixture->getPhone());
     }
 
     public function testUserDeleteRemovesUser(): void
     {
-        $this->markTestIncomplete();
+        $this->client->request('GET', '/login');
+        $this->client->submitForm('Login', [
+            '_username' => $this->adminUser->getEmail(),
+            '_password' => 'password',
+        ]);
 
         $originalNumObjectsInRepository = count($this->userRepository->findAll());
 
-        $fixture = new User();
-        $fixture->setEmail('My Title');
-        $fixture->setRoles('My Title');
-        $fixture->setPassword('My Title');
-        $fixture->setLastName('My Title');
-        $fixture->setFirstName('My Title');
-        $fixture->setPhone('My Title');
-        $fixture->setProfilePicture('My Title');
+        $user = $this->userRepository->findOneBy(['email' => 'deletable@buddy.com']);
 
-        $this->manager->persist($fixture);
-        $this->manager->flush();
-
-        self::assertSame($originalNumObjectsInRepository + 1, count($this->userRepository->findAll()));
-
-        $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
+        $this->client->request('GET', sprintf('%s%s', $this->path, $user->getId()));
         $this->client->submitForm('Delete');
 
-        self::assertSame($originalNumObjectsInRepository, count($this->userRepository->findAll()));
-        self::assertResponseRedirects('/user/');
+        self::assertSame($originalNumObjectsInRepository - 1, count($this->userRepository->findAll()));
+        self::assertResponseRedirects('/dashboard/user/');
     }
 }

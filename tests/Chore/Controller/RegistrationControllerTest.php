@@ -10,6 +10,7 @@ use App\Chore\Repository\AssignmentRepository;
 use App\Chore\Repository\PermissionRepository;
 use App\Chore\Repository\StatusRepository;
 use App\Chore\Repository\UserRepository;
+use App\Tests\Helpers\DatabaseHelper;
 use App\Tests\Helpers\SessionHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -62,7 +63,7 @@ class RegistrationControllerTest extends WebTestCase
 
     public function testUserRegistrationWithValidDataCreatesUser(): void
     {
-        $this->cleanDataBase();
+        DatabaseHelper::cleanDatabase();
 
         // Register first user
 
@@ -104,7 +105,8 @@ class RegistrationControllerTest extends WebTestCase
         // User should not be admin
         $this->assertNotContains('ROLE_ADMIN', $this->userRepository->findOneBy(['email' => $this->lambdaUser->getEmail()])->getRoles());
 
-        $this->cleanDataBase();
+
+        DatabaseHelper::cleanDatabase();
     }
 
     public function testUserRegistrationWithoutTokenReturnsForm(): void
@@ -124,7 +126,7 @@ class RegistrationControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful(); // Indicate that the form was not submitted successfully
         $this->assertNull($this->userRepository->findOneBy(['email' => $this->lambdaUser->getEmail()]));
 
-        $this->cleanDataBase();
+        DatabaseHelper::cleanDatabase();
     }
 
     public function testUserRegistrationWithInvalidDataReturnsForm(): void
@@ -182,12 +184,12 @@ class RegistrationControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful(); // Indicate that the form was not submitted successfully
         $this->assertNull($this->userRepository->findOneBy(['email' => $this->lambdaUser->getEmail()]));
 
-        $this->cleanDataBase();
+        DatabaseHelper::cleanDatabase();
     }
 
     public function testUserLoginWithValidDataLogsUser(): void
     {
-        $this->cleanDataBase();
+        DatabaseHelper::cleanDatabase();
         $this->registerUser($this->adminUser);
         $this->logUserIn($this->adminUser);
 
@@ -199,7 +201,7 @@ class RegistrationControllerTest extends WebTestCase
 
     public function testUserLoginWithoutTokenDataReturnsForm(): void
     {
-        $this->cleanDataBase();
+        DatabaseHelper::cleanDatabase();
         $this->registerUser($this->adminUser);
 
         $crawler = $this->client->request('GET', '/login');
@@ -219,7 +221,7 @@ class RegistrationControllerTest extends WebTestCase
 
     public function testUserLoginWithInvalidDataReturnsForm(): void
     {
-        $this->cleanDataBase();
+        DatabaseHelper::cleanDatabase();
         $this->registerUser($this->adminUser);
 
         $validForm = [
@@ -245,7 +247,7 @@ class RegistrationControllerTest extends WebTestCase
 
     public function testUserLoginWithoutDatabaseReturnsForm()
     {
-        $this->cleanDataBase();
+        DatabaseHelper::cleanDatabase();
 
         $crawler = $this->client->request('GET', '/login');
 
@@ -264,7 +266,7 @@ class RegistrationControllerTest extends WebTestCase
 
     public function testUserLogoutLogsUserOut(): void
     {
-        $this->cleanDataBase();
+        DatabaseHelper::cleanDatabase();
         $this->registerUser($this->adminUser);
         $this->logUserIn($this->adminUser);
 
@@ -273,29 +275,8 @@ class RegistrationControllerTest extends WebTestCase
 
         $this->client->request('GET', '/dashboard/my-profile/');
         $this->assertResponseRedirects('http://localhost/login');
-    }
 
-    private function cleanDataBase(): void
-    {
-        $this->permissionRepository->createQueryBuilder('p')
-            ->delete()
-            ->getQuery()
-            ->execute();
-
-        $this->assignmentRepository->createQueryBuilder('a')
-            ->delete()
-            ->getQuery()
-            ->execute();
-
-        $this->userRepository->createQueryBuilder('u')
-            ->delete()
-            ->getQuery()
-            ->execute();
-
-        $this->statusRepository->createQueryBuilder('s')
-            ->delete()
-            ->getQuery()
-            ->execute();
+        DatabaseHelper::cleanDatabase();
     }
 
     public function registerUser(User $user): void

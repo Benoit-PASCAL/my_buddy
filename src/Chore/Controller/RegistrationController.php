@@ -69,10 +69,6 @@ class RegistrationController extends AbstractController
                     $user,
                     $form->get('plainPassword')->getData()
                 ))
-                ->setLastName('')
-                ->setFirstName('')
-                ->setPhone('')
-                ->setProfilePicture('')
                 ->setSecretKey($userPasswordHasher->hashPassword($user, rand(100000, 999999)))
             ;
 
