@@ -21,6 +21,10 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
+/**
+ * RegistrationController is a controller that handles user registration related actions.
+ * It extends the AbstractController to use Symfony's base controller functionalities.
+ */
 class RegistrationController extends AbstractController
 {
     private AssignmentRepository $assignmentRepository;
@@ -28,6 +32,14 @@ class RegistrationController extends AbstractController
     private StatusRepository $statusRepository;
     private UserRepository $userRepository;
 
+    /**
+     * Constructor for RegistrationController.
+     *
+     * @param AssignmentRepository $assignmentRepository
+     * @param PermissionRepository $permissionRepository
+     * @param StatusRepository $statusRepository
+     * @param UserRepository $userRepository
+     */
     public function __construct(
         AssignmentRepository $assignmentRepository,
         PermissionRepository $permissionRepository,
@@ -41,6 +53,15 @@ class RegistrationController extends AbstractController
         $this->userRepository = $userRepository;
     }
 
+    /**
+     * Handle user registration.
+     *
+     * @Route('/register', name: 'app_register')
+     * @param Request $request
+     * @param UserPasswordHasherInterface $userPasswordHasher
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
@@ -88,6 +109,15 @@ class RegistrationController extends AbstractController
         ]);
     }
 
+    /**
+     * Save user registration data.
+     *
+     * @Route('/save', name: 'app_save', methods: ['GET', 'POST'])
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @param UserPasswordHasherInterface $userPasswordHasher
+     * @return Response
+     */
     #[Route('/save', name: 'app_save', methods: ['GET', 'POST'])]
     public function save(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher): Response
     {
@@ -141,6 +171,13 @@ class RegistrationController extends AbstractController
         ]);
     }
 
+    /**
+     * Handle user login.
+     *
+     * @Route('/login', name: 'app_login')
+     * @param AuthenticationUtils $authenticationUtils
+     * @return Response
+     */
     #[Route('/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -153,6 +190,11 @@ class RegistrationController extends AbstractController
         ]);
     }
 
+    /**
+     * Check if the current user is the first user.
+     *
+     * @return bool
+     */
     private function isFirstUser(): bool
     {
         return $this->userRepository->count() === 0;
@@ -179,6 +221,12 @@ class RegistrationController extends AbstractController
         return $this->createAssignment($adminRole);
     }
 
+    /**
+     * Create a super admin role and return it.
+     * If the role already exists, only return it.
+     *
+     * @return Status
+     */
     private function createSuperAdminRole(): Status
     {
         return $this->statusRepository->findOneBy([
@@ -189,6 +237,13 @@ class RegistrationController extends AbstractController
             ->setIcon('bi-person-fill');
     }
 
+    /**
+     * Create a controller with a given name and return it.
+     * If the controller already exists, only return it.
+     *
+     * @param string $controllerName
+     * @return Status
+     */
     private function createController(string $controllerName): Status
     {
         return $this->statusRepository->findOneBy([
@@ -198,6 +253,14 @@ class RegistrationController extends AbstractController
             ->setLabel($controllerName);
     }
 
+    /**
+     * Create a permission for a given controller and role and return it.
+     * If the permission already exists, only return it.
+     *
+     * @param Status $controller
+     * @param Status $role
+     * @return Permission
+     */
     private function createPermission(Status $controller, Status $role): Permission
     {
         return $this->permissionRepository->findOneBy([
@@ -209,6 +272,13 @@ class RegistrationController extends AbstractController
             ->setAccess(Permission::CAN_ALL);
     }
 
+    /**
+     * Create an assignment for a given role and return it.
+     * If the assignment already exists, only return it.
+     *
+     * @param Status $adminRole
+     * @return Assignment
+     */
     private function createAssignment(Status $adminRole): Assignment
     {
         $assignment =  $this->assignmentRepository->findOneBy([

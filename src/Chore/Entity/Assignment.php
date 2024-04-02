@@ -6,6 +6,10 @@ use App\Chore\Repository\AssignmentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * Assignment is an entity that represents the assignment of a role to a user.
+ * It is used to affect a role to a user for a specific period and handle access control based on it.
+ */
 #[ORM\Entity(repositoryClass: AssignmentRepository::class)]
 class Assignment
 {

@@ -8,8 +8,19 @@ use App\Chore\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
+/**
+ * MainVoter is a voter that handles access control related actions.
+ * It extends the Voter to use Symfony's base voter functionalities.
+ */
 class MainVoter extends Voter
 {
+    /**
+     * Check if the voter supports the attribute and subject.
+     *
+     * @param string $attribute
+     * @param mixed $subject
+     * @return bool
+     */
     public function supports(string $attribute, mixed $subject): bool
     {
         // only vote on `ACCESS_` attributes
@@ -40,6 +51,14 @@ class MainVoter extends Voter
         return true;
     }
 
+    /**
+     * Vote on the attribute based on the user's permissions.
+     *
+     * @param string $attribute
+     * @param mixed $subject
+     * @param TokenInterface $token
+     * @return bool
+     */
     public function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
         $controller = strtolower(explode('_', $attribute)[1]);

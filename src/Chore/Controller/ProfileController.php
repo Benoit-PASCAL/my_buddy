@@ -11,16 +11,33 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
+/**
+ * ProfileController is a controller that handles profile related actions.
+ * It extends the RightsController to check for permissions.
+ *
+ * @Route('/dashboard/my-profile')
+ */
 #[Route('/dashboard/my-profile')]
 class ProfileController extends RightsController
 {
     private SluggerInterface $slugger;
 
+    /**
+     * Constructor for ProfileController.
+     *
+     * @param SluggerInterface $slugger
+     */
     public function __construct(SluggerInterface $slugger)
     {
         $this->slugger = $slugger;
     }
 
+    /**
+     * Display the current user's profile.
+     *
+     * @Route('/', name: 'app_profile_show', methods: ['GET'])
+     * @return Response
+     */
     #[Route('/', name: 'app_profile_show', methods: ['GET'])]
     public function show(): Response
     {
@@ -31,6 +48,14 @@ class ProfileController extends RightsController
         ]);
     }
 
+    /**
+     * Edit the current user's profile.
+     *
+     * @Route('/edit', name: 'app_profile_edit', methods: ['GET', 'POST'])
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/edit', name: 'app_profile_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -56,6 +81,12 @@ class ProfileController extends RightsController
         ]);
     }
 
+    /**
+     * Set a unique path for the uploaded profile picture.
+     *
+     * @param UploadedFile $picture
+     * @return string The new path name.
+     */
     public function setUniquePath(UploadedFile $picture): string
     {
         $originalName = pathinfo($picture->getClientOriginalName(), PATHINFO_FILENAME);

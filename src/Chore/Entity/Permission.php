@@ -5,6 +5,15 @@ namespace App\Chore\Entity;
 use App\Chore\Repository\PermissionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * Permission is an entity that represents the permissions of a role on a controller.
+ * It is used to handle access control based on the role and controller.
+ * When a role is assigned to a user, the permissions are used to determine what the user can do.
+ *
+ * When a user tries to access a controller, a template or perform an action,
+ * the voter get the permissions of the user and check if the user can do the action.
+ * The voter then grants or denies the access based on the permissions.
+ */
 #[ORM\Entity(repositoryClass: PermissionRepository::class)]
 class Permission
 {

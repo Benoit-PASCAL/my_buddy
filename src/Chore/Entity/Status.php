@@ -8,6 +8,22 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use function PHPUnit\Framework\stringStartsWith;
 
+/**
+ * Status is a polymorphic entity that represents named objects.
+ * It allows to create a list of named objects that can be used in the application and to
+ * edit this list without changing the code.
+ *
+ * It is used to represent roles and controllers.
+ *
+ * It can be used to add other types of data that only need a label.
+ * For example, it can be used to store the list of countries, the list of languages, etc.
+ *
+ * The type attribute can be used to differentiate the different types of data.
+ * For example, the type can be used to store the type of the object (role, controller, country, language, etc.).
+ * The type can be used to filter the list of objects in the UI and to apply specific behaviors.
+ *
+ * Statuses can store a color and an icon to be used in the UI.
+ */
 #[ORM\Entity(repositoryClass: StatusRepository::class)]
 class Status
 {

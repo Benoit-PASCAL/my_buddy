@@ -12,12 +12,24 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * RoleController is a controller that handles role related actions.
+ * It extends the RightsController to check for permissions.
+ *
+ * @Route('/dashboard/role')
+ */
 #[Route('/dashboard/role')]
 class RoleController extends RightsController
 {
     private PermissionRepository $permissionRepository;
     private StatusRepository $statusRepository;
 
+    /**
+     * Constructor for RoleController.
+     *
+     * @param PermissionRepository $permissionRepository
+     * @param StatusRepository $statusRepository
+     */
     public function __construct(
         PermissionRepository $permissionRepository,
         StatusRepository $statusRepository
@@ -27,6 +39,13 @@ class RoleController extends RightsController
         $this->statusRepository = $statusRepository;
     }
 
+    /**
+     * Display all roles.
+     *
+     * @Route('/', name: 'app_role_index', methods: ['GET'])
+     * @param StatusRepository $statusRepository
+     * @return Response
+     */
     #[Route('/', name: 'app_role_index', methods: ['GET'])]
     public function index(StatusRepository $statusRepository): Response
     {
@@ -37,6 +56,14 @@ class RoleController extends RightsController
         ]);
     }
 
+    /**
+     * Create a new role.
+     *
+     * @Route('/new', name: 'app_role_new', methods: ['GET', 'POST'])
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/new', name: 'app_role_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -79,6 +106,13 @@ class RoleController extends RightsController
         ]);
     }
 
+    /**
+     * Display a specific role.
+     *
+     * @Route('/{id}', name: 'app_role_show', methods: ['GET'])
+     * @param Status $role
+     * @return Response
+     */
     #[Route('/{id}', name: 'app_role_show', methods: ['GET'])]
     public function show(Status $role): Response
     {
@@ -89,6 +123,15 @@ class RoleController extends RightsController
         ]);
     }
 
+    /**
+     * Edit a specific role.
+     *
+     * @Route('/{id}/edit', name: 'app_role_edit', methods: ['GET', 'POST'])
+     * @param Request $request
+     * @param Status $role
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/{id}/edit', name: 'app_role_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Status $role, EntityManagerInterface $entityManager): Response
     {
@@ -129,6 +172,15 @@ class RoleController extends RightsController
         ]);
     }
 
+    /**
+     * Delete a specific role.
+     *
+     * @Route('/{id}', name: 'app_role_delete', methods: ['POST'])
+     * @param Request $request
+     * @param Status $role
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/{id}', name: 'app_role_delete', methods: ['POST'])]
     public function delete(Request $request, Status $role, EntityManagerInterface $entityManager): Response
     {

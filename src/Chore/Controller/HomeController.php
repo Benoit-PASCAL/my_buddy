@@ -6,8 +6,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * HomeController is a controller that handles home page related actions.
+ * It extends the AbstractController to use Symfony's base controller functionalities.
+ */
 class HomeController extends AbstractController
 {
+    /**
+     * Display the home page.
+     *
+     * @Route('/', name: 'app_home')
+     * @return Response
+     */
     #[Route('/', name: 'app_home')]
     public function index(): Response
     {
@@ -16,6 +26,12 @@ class HomeController extends AbstractController
         ]);
     }
 
+    /**
+     * Display the under construction page.
+     *
+     * @Route('/', name: 'app_under_construction')
+     * @return Response
+     */
     #[Route('/', name: 'app_under_construction')]
     public function default(): Response
     {

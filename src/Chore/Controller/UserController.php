@@ -15,16 +15,34 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
+/**
+ * UserController is a controller that handles user related actions.
+ * It extends the RightsController to check for permissions.
+ *
+ * @Route('/dashboard/user')
+ */
 #[Route('/dashboard/user')]
 class UserController extends RightsController
 {
     private SluggerInterface $slugger;
 
+    /**
+     * Constructor for UserController.
+     *
+     * @param SluggerInterface $slugger
+     */
     public function __construct(SluggerInterface $slugger)
     {
         $this->slugger = $slugger;
     }
 
+    /**
+     * Display the list of users.
+     *
+     * @Route('/', name: 'app_user_index', methods: ['GET'])
+     * @param UserRepository $userRepository
+     * @return Response
+     */
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
     {
@@ -35,6 +53,16 @@ class UserController extends RightsController
         ]);
     }
 
+    /**
+     * Create a new user.
+     * When a new user is created, a random secret key is generated for the user. This key is used for password reset.
+     *
+     * @Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @param UserPasswordHasherInterface $userPasswordHasher
+     * @return Response
+     */
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher): Response
     {
@@ -60,6 +88,13 @@ class UserController extends RightsController
         ]);
     }
 
+    /**
+     * Display a specific user.
+     *
+     * @Route('/{id}', name: 'app_user_show', methods: ['GET'])
+     * @param User $user
+     * @return Response
+     */
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user): Response
     {
@@ -70,6 +105,15 @@ class UserController extends RightsController
         ]);
     }
 
+    /**
+     * Edit a specific user.
+     *
+     * @Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])
+     * @param Request $request
+     * @param User $user
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
@@ -95,6 +139,15 @@ class UserController extends RightsController
         ]);
     }
 
+    /**
+     * Delete a specific user.
+     *
+     * @Route('/{id}', name: 'app_user_delete', methods: ['POST'])
+     * @param Request $request
+     * @param User $user
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
@@ -108,6 +161,12 @@ class UserController extends RightsController
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    /**
+     * Set a unique path for the uploaded profile picture.
+     *
+     * @param UploadedFile $picture
+     * @return string The new path name.
+     */
     public function setUniquePath(UploadedFile $picture): string
     {
         $originalName = pathinfo($picture->getClientOriginalName(), PATHINFO_FILENAME);
