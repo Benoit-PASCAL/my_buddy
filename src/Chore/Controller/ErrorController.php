@@ -15,7 +15,6 @@ class ErrorController extends AbstractController
     /**
      * Display the 403 error page.
      *
-     * @Route('/403', name: 'app_403')
      * @return Response
      */
     #[Route('/403', name: 'app_403')]
@@ -30,7 +29,6 @@ class ErrorController extends AbstractController
     /**
      * Display the 404 error page.
      *
-     * @Route('/404', name: 'app_404')
      * @return Response
      */
     #[Route('/404', name: 'app_404')]
@@ -45,7 +43,6 @@ class ErrorController extends AbstractController
     /**
      * Display the 500 error page.
      *
-     * @Route('/500', name: 'app_500')
      * @return Response
      */
     #[Route('/500', name: 'app_500')]
@@ -60,7 +57,6 @@ class ErrorController extends AbstractController
     /**
      * Display the 503 error page.
      *
-     * @Route('/503', name: 'app_503')
      * @return Response
      */
     #[Route('/503', name: 'app_503')]

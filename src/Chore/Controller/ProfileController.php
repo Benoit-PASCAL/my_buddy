@@ -15,7 +15,6 @@ use Symfony\Component\String\Slugger\SluggerInterface;
  * ProfileController is a controller that handles profile related actions.
  * It extends the RightsController to check for permissions.
  *
- * @Route('/dashboard/my-profile')
  */
 #[Route('/dashboard/my-profile')]
 class ProfileController extends RightsController
@@ -35,7 +34,6 @@ class ProfileController extends RightsController
     /**
      * Display the current user's profile.
      *
-     * @Route('/', name: 'app_profile_show', methods: ['GET'])
      * @return Response
      */
     #[Route('/', name: 'app_profile_show', methods: ['GET'])]
@@ -51,7 +49,6 @@ class ProfileController extends RightsController
     /**
      * Edit the current user's profile.
      *
-     * @Route('/edit', name: 'app_profile_edit', methods: ['GET', 'POST'])
      * @param Request $request
      * @param EntityManagerInterface $entityManager
      * @return Response

@@ -19,7 +19,6 @@ use Symfony\Component\String\Slugger\SluggerInterface;
  * UserController is a controller that handles user related actions.
  * It extends the RightsController to check for permissions.
  *
- * @Route('/dashboard/user')
  */
 #[Route('/dashboard/user')]
 class UserController extends RightsController
@@ -39,7 +38,6 @@ class UserController extends RightsController
     /**
      * Display the list of users.
      *
-     * @Route('/', name: 'app_user_index', methods: ['GET'])
      * @param UserRepository $userRepository
      * @return Response
      */
@@ -57,7 +55,6 @@ class UserController extends RightsController
      * Create a new user.
      * When a new user is created, a random secret key is generated for the user. This key is used for password reset.
      *
-     * @Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])
      * @param Request $request
      * @param EntityManagerInterface $entityManager
      * @param UserPasswordHasherInterface $userPasswordHasher
@@ -91,7 +88,6 @@ class UserController extends RightsController
     /**
      * Display a specific user.
      *
-     * @Route('/{id}', name: 'app_user_show', methods: ['GET'])
      * @param User $user
      * @return Response
      */
@@ -108,7 +104,6 @@ class UserController extends RightsController
     /**
      * Edit a specific user.
      *
-     * @Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])
      * @param Request $request
      * @param User $user
      * @param EntityManagerInterface $entityManager
@@ -142,7 +137,6 @@ class UserController extends RightsController
     /**
      * Delete a specific user.
      *
-     * @Route('/{id}', name: 'app_user_delete', methods: ['POST'])
      * @param Request $request
      * @param User $user
      * @param EntityManagerInterface $entityManager

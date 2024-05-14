@@ -15,7 +15,6 @@ class HomeController extends AbstractController
     /**
      * Display the home page.
      *
-     * @Route('/', name: 'app_home')
      * @return Response
      */
     #[Route('/', name: 'app_home')]
@@ -29,7 +28,6 @@ class HomeController extends AbstractController
     /**
      * Display the under construction page.
      *
-     * @Route('/', name: 'app_under_construction')
      * @return Response
      */
     #[Route('/', name: 'app_under_construction')]

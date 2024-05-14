@@ -56,7 +56,6 @@ class RegistrationController extends AbstractController
     /**
      * Handle user registration.
      *
-     * @Route('/register', name: 'app_register')
      * @param Request $request
      * @param UserPasswordHasherInterface $userPasswordHasher
      * @param EntityManagerInterface $entityManager
@@ -112,7 +111,6 @@ class RegistrationController extends AbstractController
     /**
      * Save user registration data.
      *
-     * @Route('/save', name: 'app_save', methods: ['GET', 'POST'])
      * @param Request $request
      * @param EntityManagerInterface $entityManager
      * @param UserPasswordHasherInterface $userPasswordHasher
@@ -174,7 +172,6 @@ class RegistrationController extends AbstractController
     /**
      * Handle user login.
      *
-     * @Route('/login', name: 'app_login')
      * @param AuthenticationUtils $authenticationUtils
      * @return Response
      */

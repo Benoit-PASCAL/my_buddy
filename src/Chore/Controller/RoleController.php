@@ -16,7 +16,6 @@ use Symfony\Component\Routing\Annotation\Route;
  * RoleController is a controller that handles role related actions.
  * It extends the RightsController to check for permissions.
  *
- * @Route('/dashboard/role')
  */
 #[Route('/dashboard/role')]
 class RoleController extends RightsController
@@ -42,7 +41,6 @@ class RoleController extends RightsController
     /**
      * Display all roles.
      *
-     * @Route('/', name: 'app_role_index', methods: ['GET'])
      * @param StatusRepository $statusRepository
      * @return Response
      */
@@ -59,7 +57,6 @@ class RoleController extends RightsController
     /**
      * Create a new role.
      *
-     * @Route('/new', name: 'app_role_new', methods: ['GET', 'POST'])
      * @param Request $request
      * @param EntityManagerInterface $entityManager
      * @return Response
@@ -109,7 +106,6 @@ class RoleController extends RightsController
     /**
      * Display a specific role.
      *
-     * @Route('/{id}', name: 'app_role_show', methods: ['GET'])
      * @param Status $role
      * @return Response
      */
@@ -126,7 +122,6 @@ class RoleController extends RightsController
     /**
      * Edit a specific role.
      *
-     * @Route('/{id}/edit', name: 'app_role_edit', methods: ['GET', 'POST'])
      * @param Request $request
      * @param Status $role
      * @param EntityManagerInterface $entityManager
@@ -175,7 +170,6 @@ class RoleController extends RightsController
     /**
      * Delete a specific role.
      *
-     * @Route('/{id}', name: 'app_role_delete', methods: ['POST'])
      * @param Request $request
      * @param Status $role
      * @param EntityManagerInterface $entityManager
