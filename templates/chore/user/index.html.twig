@@ -10,16 +10,114 @@
             </div>
             <div class="card-body">
                 <table class="table">
+                    <form method="post">
                     <thead>
                     <tr>
-                        <th>Roles</th>
-                        <th>LastName</th>
-                        <th>FirstName</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>actions</th>
+                        <th class="" >
+                                    Roles
+                        </th>
+                        <th>
+                            {% if app.request.get('sort') == 'lastName_down' %}
+                                <button class="silent_btn" name="sort" value="lastName_up" style="color: #0099FF; display: flex">
+                                    LastName
+                                    <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                        <i class="bi bi-arrow-down"></i>
+                                    </div>
+                                </button>
+                            {% elseif app.request.get('sort') == 'lastName_up' %}
+                                <button class="silent_btn" name="sort" value="null" style="color: #0099FF; display: flex">
+                            LastName
+                                <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                    <i class="bi bi-arrow-up"></i>
+                                </div>
+                            </button>
+                            {% else %}
+                                <button class="silent_btn" name="sort" value="lastName_down" style="display: flex">
+                                    LastName
+                                    <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                        <i class="bi bi-arrow-down"></i>
+                                    </div>
+                                </button>
+                            {% endif %}
+                        </th>
+                        <th>
+                            {% if app.request.get('sort') == 'firstName_down' %}
+                                <button class="silent_btn" name="sort" value="firstName_up" style="color: #0099FF; display: flex">
+                                    FirstName
+                                    <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                        <i class="bi bi-arrow-down"></i>
+                                    </div>
+                                </button>
+                            {% elseif app.request.get('sort') == 'firstName_up' %}
+                                <button class="silent_btn" name="sort" value="null" style="color: #0099FF; display: flex">
+                            FirstName
+                                <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                    <i class="bi bi-arrow-up"></i>
+                                </div>
+                            </button>
+                            {% else %}
+                                <button class="silent_btn" name="sort" value="firstName_down" style="display: flex">
+                                    FirstName
+                                    <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                        <i class="bi bi-arrow-down"></i>
+                                    </div>
+                                </button>
+                            {% endif %}
+                        </th>
+                        <th>
+                            {% if app.request.get('sort') == 'email_down' %}
+                                <button class="silent_btn" name="sort" value="email_up" style="color: #0099FF; display: flex">
+                                    Email
+                                    <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                        <i class="bi bi-arrow-down"></i>
+                                    </div>
+                                </button>
+                            {% elseif app.request.get('sort') == 'email_up' %}
+                                <button class="silent_btn" name="sort" value="null" style="color: #0099FF; display: flex">
+                            Email
+                                <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                    <i class="bi bi-arrow-up"></i>
+                                </div>
+                            </button>
+                            {% else %}
+                                <button class="silent_btn" name="sort" value="email_down" style="display: flex">
+                                    Email
+                                    <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                        <i class="bi bi-arrow-down"></i>
+                                    </div>
+                                </button>
+                            {% endif %}
+                        </th>
+                        <th>
+                            {% if app.request.get('sort') == 'phone_down' %}
+                                <button class="silent_btn" name="sort" value="phone_up" style="color: #0099FF; display: flex">
+                                    Phone
+                                    <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                        <i class="bi bi-arrow-down"></i>
+                                    </div>
+                                </button>
+                            {% elseif app.request.get('sort') == 'phone_up' %}
+                                <button class="silent_btn" name="sort" value="null" style="color: #0099FF; display: flex">
+                            Phone
+                                <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                    <i class="bi bi-arrow-up"></i>
+                                </div>
+                            </button>
+                            {% else %}
+                                <button class="silent_btn" name="sort" value="phone_down" style="display: flex">
+                                    Phone
+                                    <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                        <i class="bi bi-arrow-down"></i>
+                                    </div>
+                                </button>
+                            {% endif %}
+                        </th>
+                        <th>
+                            actions
+                        </th>
                     </tr>
                     </thead>
+                    </form>
                     <tbody>
                     {% for user in users %}
                         <tr>
