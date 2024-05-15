@@ -46,3 +46,17 @@ tr {
         display: table-row;
     }
 }
+
+/* Button */
+
+button.silent_btn {
+    background-color: transparent;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    font-size: inherit;
+    font-weight: inherit;
+    margin: 0;
+    padding: 0;
+    text-align: inherit;
+}

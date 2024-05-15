@@ -248,4 +248,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public static function getAttributes(): array
+    {
+        return [
+            'id',
+            'email',
+            'roles',
+            'lastName',
+            'firstName',
+            'phone',
+            'profilePicture',
+        ];
+    }
 }

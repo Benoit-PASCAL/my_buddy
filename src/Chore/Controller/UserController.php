@@ -41,13 +41,16 @@ class UserController extends RightsController
      * @param UserRepository $userRepository
      * @return Response
      */
-    #[Route('/', name: 'app_user_index', methods: ['GET'])]
-    public function index(UserRepository $userRepository): Response
+    #[Route('/', name: 'app_user_index', methods: ['GET', 'POST'])]
+    public function index(Request $request, UserRepository $userRepository): Response
     {
-        //$this->checkRights(Permission::CAN_VIEW);
+        $this->checkRights(Permission::CAN_VIEW);
+
+        $sort = $this->getSortParams($request);
+        $users = $userRepository->findBy([], $sort);
 
         return $this->render('chore/user/index.html.twig', [
-            'users' => $userRepository->findAll(),
+            'users' => $users,
         ]);
     }
 
@@ -156,6 +159,47 @@ class UserController extends RightsController
     }
 
     /**
+     * Get the sort parameters from the request.
+     * The sort parameter is in the format 'attribute_direction'.
+     * The attribute is the name of the attribute to sort by and the direction is either 'up' or 'down'.
+     * The function returns an array with the attribute as key and the direction as value.
+     * If the sort parameter is not set, the function returns an empty array.
+     * If the sort parameter is not in the correct format, the function returns an empty array and shows a warning.
+     * If the attribute is not a valid attribute of the User class, the function returns an empty array and shows a warning.
+     * If the direction is not 'up' or 'down', the function returns an empty array and shows a warning.
+     *
+     * @param $request
+     * @return array
+     */
+    private function getSortParams($request): array
+    {
+        $sort = $request->request->get('sort');
+
+        if(in_array($sort, [null, '', 'none', 'default', 'null'])) {
+            return [];
+        }
+
+        if(str_contains($sort, '_')) {
+            $sort = explode('_', $sort);
+
+            if(!in_array($sort[1], ['down', 'up'])) {
+                $this->showError('Invalid sort direction : ' . $sort[1] . '.');
+                return [];
+            }
+
+            if(!in_array($sort[0], User::getAttributes())) {
+                $this->showError('Invalid sort attribute : ' . $sort[0] . ' is not a attribute of '. User::class . '.');
+                return [];
+            }
+
+            return [$sort[0] => str_replace(['down', 'up'], ['ASC', 'DESC'], $sort[1])];
+        }
+
+        $this->showError('Invalid sort format : ' . $sort . '.');
+        return [];
+    }
+
+    /**
      * Set a unique path for the uploaded profile picture.
      *
      * @param UploadedFile $picture
@@ -176,5 +220,28 @@ class UserController extends RightsController
         }
 
         return $newName;
+    }
+
+    /**
+     * Show an error message within console when in the development environment.
+     *
+     * @param $sort
+     * @return void
+     */
+    public function showError(string $msg, $level = 'warning'): void
+    {
+        if ($_ENV['APP_ENV'] == 'dev') {
+            echo '<script>';
+            if($level == 'error') {
+                echo 'console.error("'.$msg.'")';
+            } else if($level == 'info') {
+                echo 'console.info("'.$msg.'")';
+            } else if($level == 'log') {
+                echo 'console.log("'.$msg.'")';
+            } else if($level == 'warning') {
+                echo 'console.warn("'.$msg.'")';
+            }
+            echo '</script>';
+        }
     }
 }
