@@ -1,0 +1,9 @@
+{{ form_start(form) }}
+    <div class="card-body">
+        {{ form_widget(form) }}
+    </div>
+    <div class="card-footer">
+        <a class="btn btn-outline-secondary" href="{{ path('app_event_index') }}">Back to list</a>
+        <button class="btn btn-outline-success">{{ button_label|default('Save') }}</button>
+    </div>
+{{ form_end(form) }}

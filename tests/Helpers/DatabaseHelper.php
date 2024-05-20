@@ -7,7 +7,6 @@ use App\Chore\Entity\Assignment;
 use App\Chore\Entity\Permission;
 use App\Chore\Entity\Status;
 use App\Chore\Entity\User;
-use PHPUnit\Framework\MockObject\Rule\AnyInvokedCount as AnyInvokedCountMatcher;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -37,6 +36,12 @@ class DatabaseHelper extends WebTestCase
 
         $statusRepo = static::getContainer()->get('doctrine')->getRepository(Status::class);
         $statusRepo->createQueryBuilder('s')
+            ->delete()
+            ->getQuery()
+            ->execute();
+
+        $statusRepo = static::getContainer()->get('doctrine')->getRepository(Event::class);
+        $statusRepo->createQueryBuilder('e')
             ->delete()
             ->getQuery()
             ->execute();

@@ -1,0 +1,155 @@
+{% extends 'chore/base_dashboard.html.twig' %}
+
+{% block title %}Event index{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1>Events</h1>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <form method="post">
+                    <thead>
+                    <tr>
+                        <th>
+                            {% if app.request.get('sort') == 'title_down' %}
+                                <button class="silent_btn" name="sort" value="title_up" style="color: #0099FF; display: flex">
+                                    Title
+                                    <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                        <i class="bi bi-arrow-down"></i>
+                                    </div>
+                                </button>
+                            {% elseif app.request.get('sort') == 'title_up' %}
+                                <button class="silent_btn" name="sort" value="null" style="color: #0099FF; display: flex">
+                            Title
+                                <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                    <i class="bi bi-arrow-up"></i>
+                                </div>
+                            </button>
+                            {% else %}
+                                <button class="silent_btn" name="sort" value="title_down" style="display: flex">
+                                    Title
+                                    <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                        <i class="bi bi-arrow-down"></i>
+                                    </div>
+                                </button>
+                            {% endif %}
+                        </th>
+                        <th>
+                            {% if app.request.get('sort') == 'description_down' %}
+                                <button class="silent_btn" name="sort" value="description_up" style="color: #0099FF; display: flex">
+                                    Description
+                                    <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                        <i class="bi bi-arrow-down"></i>
+                                    </div>
+                                </button>
+                            {% elseif app.request.get('sort') == 'description_up' %}
+                                <button class="silent_btn" name="sort" value="null" style="color: #0099FF; display: flex">
+                            Description
+                                <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                    <i class="bi bi-arrow-up"></i>
+                                </div>
+                            </button>
+                            {% else %}
+                                <button class="silent_btn" name="sort" value="description_down" style="display: flex">
+                                    Description
+                                    <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                        <i class="bi bi-arrow-down"></i>
+                                    </div>
+                                </button>
+                            {% endif %}
+                        </th>
+                        <th>
+                            {% if app.request.get('sort') == 'startDate_down' %}
+                                <button class="silent_btn" name="sort" value="startDate_up" style="color: #0099FF; display: flex">
+                                    Start Date
+                                    <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                        <i class="bi bi-arrow-down"></i>
+                                    </div>
+                                </button>
+                            {% elseif app.request.get('sort') == 'startDate_up' %}
+                                <button class="silent_btn" name="sort" value="null" style="color: #0099FF; display: flex">
+                            Start Date
+                                <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                    <i class="bi bi-arrow-up"></i>
+                                </div>
+                            </button>
+                            {% else %}
+                                <button class="silent_btn" name="sort" value="startDate_down" style="display: flex">
+                                    Start Date
+                                    <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                        <i class="bi bi-arrow-down"></i>
+                                    </div>
+                                </button>
+                            {% endif %}
+                        </th>
+                        <th>
+                            {% if app.request.get('sort') == 'endDate_down' %}
+                                <button class="silent_btn" name="sort" value="endDate_up" style="color: #0099FF; display: flex">
+                                    End Date
+                                    <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                        <i class="bi bi-arrow-down"></i>
+                                    </div>
+                                </button>
+                            {% elseif app.request.get('sort') == 'endDate_up' %}
+                                <button class="silent_btn" name="sort" value="null" style="color: #0099FF; display: flex">
+                            End Date
+                                <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                    <i class="bi bi-arrow-up"></i>
+                                </div>
+                            </button>
+                            {% else %}
+                                <button class="silent_btn" name="sort" value="endDate_down" style="display: flex">
+                                    End Date
+                                    <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                        <i class="bi bi-arrow-down"></i>
+                                    </div>
+                                </button>
+                            {% endif %}
+                        </th>
+                        <th>
+                            actions
+                        </th>
+                    </tr>
+                    </thead>
+                    </form>
+                    <tbody>
+                    {% for event in events %}
+                        <tr>
+                            <td>
+                                <span class="cell-title">Title</span>
+                                {{ event.title }}</td>
+                            <td>
+                                <span class="cell-title">Description</span>
+                                {{ event.description }}
+                            </td>
+                            <td>
+                                <span class="cell-title">Start Date</span>
+                                {{ event.startDate ? event.startDate|date('Y-m-d h:i') : ''}}
+                            </td>
+                            <td>
+                                <span class="cell-title">End Date</span>
+                                {{ event.endDate ? event.endDate|date('Y-m-d h:i') : '' }}
+                            </td>
+                            <td>
+                                <span class="cell-title">Actions</span>
+                                <a class="btn btn-outline-primary" href="{{ path('app_event_show', {'id': event.id}) }}">See</a>
+                                <a class="btn btn-outline-primary" href="{{ path('app_event_edit', {'id': event.id}) }}">Edit</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="9">no records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-outline-success" href="{{ path('app_event_new') }}">Create new</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

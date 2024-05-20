@@ -1,0 +1,14 @@
+{% extends 'chore/base_dashboard.html.twig' %}
+
+{% block title %}Edit Event{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1>Event</h1>
+            </div>
+            {{ include('app/event/_form.html.twig', {'button_label': 'Update'}) }}
+        </div>
+    </div>
+{% endblock %}
