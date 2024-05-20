@@ -5,6 +5,15 @@
 {% block body %}
     <h1>Register</h1>
 
+    {% if is_granted('IS_DEMO') %}
+        <small>You are in a demo, you can't register new account.</small>
+        <small>An account has been created for you to discover the app.</small>
+        <small style="padding-bottom: 15px">You can directly login here</small>
+
+    <a href="{{ path('app_login') }}">Login</a>
+    {% else %}
+
+
     {{ form_errors(registrationForm) }}
 
     {{ form_start(registrationForm) }}
@@ -15,4 +24,5 @@
 
         <button type="submit" class="btn btn-outline-success">Register</button>
     {{ form_end(registrationForm) }}
+    {% endif %}
 {% endblock %}
