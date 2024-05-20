@@ -3,6 +3,7 @@
 namespace App\Chore\Entity;
 
 use App\Chore\Repository\PermissionRepository;
+use App\Chore\Service\FrontLogger;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -100,14 +101,15 @@ class Permission
 
     public static function getAppControllersList(): array
     {
-        if(dir('/app/src/App/Controller/'))
+        if(file_exists(dirname(__DIR__, 2) .'/App/Controller/'))
         {
-            $controllers = scandir('/app/src/App/Controller/');
+            $dir = dirname(__DIR__, 2) .'/App/Controller/';
+            $controllers = scandir($dir);
             $controllers = array_filter($controllers, fn($controller) => str_contains($controller, 'Controller.php'));
             $controllers = array_map(fn($controller) => str_replace('Controller.php', 's', $controller), $controllers);
             return array_merge(self::CHORE_CONTROLLER_LIST, $controllers);
-        };
+        }
 
-        return [];
+        return self::CHORE_CONTROLLER_LIST;
     }
 }
