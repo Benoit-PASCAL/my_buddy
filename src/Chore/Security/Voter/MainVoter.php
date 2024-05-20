@@ -44,7 +44,7 @@ class MainVoter extends Voter
 
         // control if the controller is well formatted => in controllers list
         if(!in_array($controller, array_map(function($item) {
-            return strtolower($item); } ,Permission::CONTROLLER_LIST))) {
+            return strtolower($item); } ,Permission::getAppControllersList()))) {
             return false;
         }
 

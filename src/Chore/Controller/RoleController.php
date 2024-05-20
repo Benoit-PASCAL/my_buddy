@@ -53,8 +53,11 @@ class RoleController extends RightsController
         $sort = RequestAnalyzer::getSortParams($request, new Status());
         $roles = $statusRepository->findAllRoles($sort);
 
+        $controllerList = Permission::getAppControllersList();
+
         return $this->render('chore/role/index.html.twig', [
             'statuses' => $roles,
+            'controllerList' => $controllerList,
         ]);
     }
 
@@ -74,7 +77,7 @@ class RoleController extends RightsController
             ->setType(Status::ROLE_TYPE);
         $entityManager->persist($role);
 
-        foreach (Permission::CONTROLLER_LIST as $controllerName) {
+        foreach (Permission::getAppControllersList() as $controllerName) {
             $controller = $this->statusRepository->findOneBy([
                 'label' => $controllerName
             ]) ?? (new Status())
@@ -136,7 +139,7 @@ class RoleController extends RightsController
     {
         $this->checkRights(Permission::CAN_EDIT);
 
-        foreach (Permission::CONTROLLER_LIST as $controllerName) {
+        foreach (Permission::getAppControllersList() as $controllerName) {
             $controller = $this->statusRepository->findOneBy([
                 'label' => $controllerName
             ]) ?? (new Status())

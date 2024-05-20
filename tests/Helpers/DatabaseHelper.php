@@ -2,6 +2,7 @@
 
 namespace App\Tests\Helpers;
 
+use App\App\Entity\Event;
 use App\Chore\Entity\Assignment;
 use App\Chore\Entity\Permission;
 use App\Chore\Entity\Status;
@@ -67,7 +68,7 @@ class DatabaseHelper extends WebTestCase
             $manager->persist($role);
         }
 
-        foreach (Permission::CONTROLLER_LIST as $controllerName) {
+        foreach (Permission::getAppControllersList() as $controllerName) {
             $controller = new Status();
 
             $controller

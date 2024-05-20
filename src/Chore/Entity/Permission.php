@@ -23,7 +23,7 @@ class Permission
     public const CAN_DELETE = 3;
     public const CAN_CREATE = 4;
     public const CAN_ALL = 5;
-    public const CONTROLLER_LIST = [
+    public const CHORE_CONTROLLER_LIST = [
         'Users',
         'Roles',
     ];
@@ -96,5 +96,18 @@ class Permission
             self::CAN_ALL => 'Full Access',
             default => throw new \Error('This code should not be reached!')
         };
+    }
+
+    public static function getAppControllersList(): array
+    {
+        if(dir('/app/src/App/Controller/'))
+        {
+            $controllers = scandir('/app/src/App/Controller/');
+            $controllers = array_filter($controllers, fn($controller) => str_contains($controller, 'Controller.php'));
+            $controllers = array_map(fn($controller) => str_replace('Controller.php', 's', $controller), $controllers);
+            return array_merge(self::CHORE_CONTROLLER_LIST, $controllers);
+        };
+
+        return [];
     }
 }

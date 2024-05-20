@@ -37,7 +37,7 @@
                                     </button>
                                 {% endif %}
                             </th>
-                            {% for permissionName in constant('App\\Chore\\Entity\\Permission::CONTROLLER_LIST') %}
+                            {% for permissionName in controllerList %}
                                 <th>{{ permissionName }}</th>
                             {% endfor %}
                             <th>
@@ -76,7 +76,7 @@
                     <span style="color:{{ role.color }}">{{ role.fullIcon|raw }}</span>
                     {{ role.label }}
                 </td>
-                {% for permissionName in constant('App\\Chore\\Entity\\Permission::CONTROLLER_LIST') %}
+                {% for permissionName in controllerList %}
                     <td>
                     <span class="cell-title">
                                 {{ permissionName }}
