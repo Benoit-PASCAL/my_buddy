@@ -10,16 +10,64 @@
         </div>
         <div class="card-body">
             <table class="table">
-        <thead>
-            <tr>
-                <th>Label</th>
-                {% for permissionName in constant('App\\Chore\\Entity\\Permission::CONTROLLER_LIST') %}
-                    <th>{{ permissionName }}</th>
-                {% endfor %}
-                <th>Active</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
+                <form method="post">
+                    <thead>
+                        <tr>
+                            <th>
+                                {% if app.request.get('sort') == 'label_down' %}
+                                    <button class="silent_btn" name="sort" value="label_up" style="color: #0099FF; display: flex">
+                                        Label
+                                        <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                            <i class="bi bi-arrow-down"></i>
+                                        </div>
+                                    </button>
+                                {% elseif app.request.get('sort') == 'label_up' %}
+                                    <button class="silent_btn" name="sort" value="null" style="color: #0099FF; display: flex">
+                                        Label
+                                        <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                            <i class="bi bi-arrow-up"></i>
+                                        </div>
+                                    </button>
+                                {% else %}
+                                    <button class="silent_btn" name="sort" value="label_down" style="display: flex">
+                                        Label
+                                        <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                            <i class="bi bi-arrow-down"></i>
+                                        </div>
+                                    </button>
+                                {% endif %}
+                            </th>
+                            {% for permissionName in constant('App\\Chore\\Entity\\Permission::CONTROLLER_LIST') %}
+                                <th>{{ permissionName }}</th>
+                            {% endfor %}
+                            <th>
+                                {% if app.request.get('sort') == 'active_down' %}
+                                    <button class="silent_btn" name="sort" value="active_up" style="color: #0099FF; display: flex">
+                                        Active
+                                        <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                            <i class="bi bi-arrow-down"></i>
+                                        </div>
+                                    </button>
+                                {% elseif app.request.get('sort') == 'active_up' %}
+                                    <button class="silent_btn" name="sort" value="null" style="color: #0099FF; display: flex">
+                                        Active
+                                        <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                            <i class="bi bi-arrow-up"></i>
+                                        </div>
+                                    </button>
+                                {% else %}
+                                    <button class="silent_btn" name="sort" value="active_down" style="display: flex">
+                                        Active
+                                        <div class="" style="display: flex; flex-flow: column; padding-left: 6px;">
+                                            <i class="bi bi-arrow-down"></i>
+                                        </div>
+                                    </button>
+                                {% endif %}
+                            </th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                </form>
         <tbody>
         {% for role in statuses %}
             <tr>
