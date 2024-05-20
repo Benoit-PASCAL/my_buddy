@@ -42,7 +42,12 @@ class UserControllerTest extends WebTestCase
 
     public function testUserIndexRendersCorrectly(): void
     {
-        $this->client->loginUser($this->adminUser);
+        $this->client->request('GET', '/login');
+        $this->client->submitForm('Login', [
+            '_username' => $this->adminUser->getEmail(),
+            '_password' => 'password',
+        ]);
+
         $crawler = $this->client->request('GET', $this->path);
 
         self::assertResponseStatusCodeSame(200);
