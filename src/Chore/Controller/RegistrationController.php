@@ -206,7 +206,7 @@ class RegistrationController extends AbstractController
     {
         $adminRole = $this->createSuperAdminRole();
 
-        foreach (Permission::CONTROLLER_LIST as $controllerName) {
+        foreach (Permission::getAppControllersList() as $controllerName) {
             $newController = $this->createController($controllerName);
             $entityManager->persist($newController);
 

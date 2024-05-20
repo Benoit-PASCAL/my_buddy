@@ -32,7 +32,7 @@ class PermissionType extends AbstractType
                 'class' => Status::class,
                 'constraints' => [
                     new Choice([
-                        'choices' => Permission::CONTROLLER_LIST,
+                        'choices' => Permission::getAppControllersList(),
                     ])
                 ],
                 'disabled' => true,

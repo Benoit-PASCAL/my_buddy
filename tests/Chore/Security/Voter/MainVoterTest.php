@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class MainVoterTest extends TestCase
 {
-    public string $validController = Permission::CONTROLLER_LIST[0];
+    public string $validController = Permission::CHORE_CONTROLLER_LIST[0];
     public string $nonExistingController = 'nonExistingController';
     public string $validAction = '1';
     public string $nonIntegerAction = 'view';
