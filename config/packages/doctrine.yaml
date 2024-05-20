@@ -14,7 +14,7 @@ doctrine:
             App:
                 is_bundle: false
                 dir: '%kernel.project_dir%/src/App/Entity'
-                prefix: 'App\Entity'
+                prefix: 'App\App\Entity'
                 alias: App
             Chore:
                 is_bundle: false
