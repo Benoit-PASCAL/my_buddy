@@ -197,4 +197,12 @@ class Status
 
         return $this;
     }
+
+    public static function getAttributes(): array
+    {
+        return [
+            'label',
+            'active',
+        ];
+    }
 }

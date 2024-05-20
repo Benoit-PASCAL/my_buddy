@@ -7,6 +7,7 @@ use App\Chore\Entity\Status;
 use App\Chore\Form\RoleType;
 use App\Chore\Repository\PermissionRepository;
 use App\Chore\Repository\StatusRepository;
+use App\Chore\Service\RequestAnalyzer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,13 +45,16 @@ class RoleController extends RightsController
      * @param StatusRepository $statusRepository
      * @return Response
      */
-    #[Route('/', name: 'app_role_index', methods: ['GET'])]
-    public function index(StatusRepository $statusRepository): Response
+    #[Route('/', name: 'app_role_index', methods: ['GET', 'POST'])]
+    public function index(Request $request, StatusRepository $statusRepository): Response
     {
         $this->checkRights(Permission::CAN_VIEW);
 
+        $sort = RequestAnalyzer::getSortParams($request, new Status());
+        $roles = $statusRepository->findAllRoles($sort);
+
         return $this->render('chore/role/index.html.twig', [
-            'statuses' => $statusRepository->findAllRoles(),
+            'statuses' => $roles,
         ]);
     }
 
